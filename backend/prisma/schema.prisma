@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CampaignStatus {
+  SCHEDULED
+  PROCESSING
+  COMPLETED
+  PARTIAL_FAILURE
+  FAILED
+  CANCELLED
+}
+
+enum RecipientStatus {
+  SCHEDULED
+  PROCESSING
+  SENT
+  FAILED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  googleId  String   @unique
+  email     String   @unique
+  name      String?
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  senders   Sender[]
+  campaigns EmailCampaign[]
+
+  @@index([googleId])
+  @@index([email])
+}
+
+model Sender {
+  id          String   @id @default(uuid())
+  userId      String
+  email       String
+  displayName String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaigns EmailCampaign[]
+
+  @@index([userId])
+  @@index([email])
+}
+
+model EmailCampaign {
+  id                   String         @id @default(uuid())
+  userId               String
+  senderId             String?
+  subject              String
+  body                 String
+  startTime            DateTime
+  delayBetweenEmailsMs Int            @default(1000)
+  hourlyLimit          Int            @default(100)
+  status               CampaignStatus @default(SCHEDULED)
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sender     Sender?          @relation(fields: [senderId], references: [id], onDelete: SetNull)
+  recipients EmailRecipient[]
+  sendLogs   EmailSendLog[]
+
+  @@index([userId])
+  @@index([senderId])
+  @@index([status])
+  @@index([startTime])
+}
+
+model EmailRecipient {
+  id             String          @id @default(uuid())
+  campaignId     String
+  email          String
+  status         RecipientStatus @default(SCHEDULED)
+  scheduledAt    DateTime
+  sentAt         DateTime?
+  failedAt       DateTime?
+  errorMessage   String?
+  attempts       Int             @default(0)
+  idempotencyKey String          @unique
+  bullJobId      String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  campaign EmailCampaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  sendLogs EmailSendLog[]
+
+  @@index([campaignId])
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([email])
+  @@index([idempotencyKey])
+}
+
+model EmailSendLog {
+  id           String          @id @default(uuid())
+  recipientId  String
+  campaignId   String
+  status       RecipientStatus
+  messageId    String?
+  errorMessage String?
+  sentAt       DateTime        @default(now())
+  createdAt    DateTime        @default(now())
+
+  recipient EmailRecipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  campaign  EmailCampaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([recipientId])
+  @@index([campaignId])
+  @@index([status])
+}
