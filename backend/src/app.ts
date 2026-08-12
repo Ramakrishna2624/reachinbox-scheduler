@@ -12,7 +12,15 @@ import emailRoutes from './modules/emails/emailRoutes';
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow Vercel frontend domains, local dev, or any browser request
+      callback(null, true);
+    },
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
