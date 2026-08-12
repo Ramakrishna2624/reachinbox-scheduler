@@ -2,6 +2,7 @@ import React from 'react';
 import { CheckCircle2, Zap, Shield, Database, Mail } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../services/api';
 
 const GOOGLE_ICON = (
   <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -56,7 +57,7 @@ export const LoginPage: React.FC = () => {
           {/* OAuth */}
           <div className="space-y-4">
             <a
-              href="/api/auth/google"
+              href={`${API_BASE_URL}/auth/google`}
               className="w-full flex items-center justify-center gap-3 bg-white text-slate-900 hover:bg-slate-100 font-bold text-sm py-3.5 px-6 rounded-2xl shadow-xl transition-all hover:scale-[1.01] active:scale-[0.99]"
             >
               {GOOGLE_ICON}

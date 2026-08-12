@@ -3,6 +3,7 @@ import { Mail, Zap, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { UserAvatar } from './ui/UserAvatar';
 import { Button } from './ui/Button';
+import { API_BASE_URL } from '../services/api';
 
 export const AppHeader: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -47,7 +48,7 @@ export const AppHeader: React.FC = () => {
           </div>
         ) : (
           <a
-            href="/api/auth/google"
+            href={`${API_BASE_URL}/auth/google`}
             className="inline-flex items-center gap-2 glow-gradient text-white font-semibold text-xs py-2 px-4 rounded-xl shadow-lg shadow-blue-500/20 hover:opacity-90 transition-all"
           >
             Continue with Google
