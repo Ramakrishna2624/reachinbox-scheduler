@@ -2,6 +2,10 @@
 node_modules/
 .pnpm-store/
 
+# Deployment scripts (contain tokens - never commit)
+scripts/
+
+
 # Build outputs
 dist/
 build/
