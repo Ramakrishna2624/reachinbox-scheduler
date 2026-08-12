@@ -12,7 +12,7 @@ import {
 const getApiBaseUrl = () => {
   const envUrl = (import.meta as any).env?.VITE_API_URL;
   if (envUrl) return envUrl;
-  return 'https://backend-ten-rose.vercel.app/api';
+  return 'https://backend-liart-alpha-38.vercel.app/api';
 };
 
 export const API_BASE_URL = getApiBaseUrl();
