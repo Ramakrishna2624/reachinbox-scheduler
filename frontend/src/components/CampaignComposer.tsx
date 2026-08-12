@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { parseEmailLeads, ParsedEmailResult } from '../utils/emailParser';
 import api from '../services/api';
+import { Button } from './ui/Button';
+import { Input, Textarea } from './ui/Input';
+import { FileUploader } from './ui/FileUploader';
 import { Send, Upload, FileText, CheckCircle2, AlertCircle, Clock, ShieldCheck, X } from 'lucide-react';
 
 interface CampaignComposerProps {
