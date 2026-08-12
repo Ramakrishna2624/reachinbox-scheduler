@@ -1,12 +1,13 @@
 import React from 'react';
 import { Mail, LogOut, ShieldCheck, Zap, User as UserIcon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../services/api';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
 
   const handleGoogleLogin = () => {
-    window.location.href = '/api/auth/google';
+    window.location.href = `${API_BASE_URL}/auth/google`;
   };
 
   return (
