@@ -1,8 +1,8 @@
 import React from 'react';
 import { Mail, Zap, LogOut } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { UserAvatar } from '../ui/UserAvatar';
-import { Button } from '../ui/Button';
+import { useAuth } from '../context/AuthContext';
+import { UserAvatar } from './ui/UserAvatar';
+import { Button } from './ui/Button';
 
 export const AppHeader: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
